@@ -70,7 +70,7 @@ for service in "$@"; do
        custom-start-points) start_point_yaml "${service}" ;;
     exercises-start-points) start_point_yaml "${service}" ;;
     languages-start-points) start_point_yaml "${service}" ;;
-                   creator) creator_yaml ;;
-                     saver) saver_yaml ;;
+                   creator)     creator_yaml              ;;
+                     saver)       saver_yaml              ;;
   esac
 done
