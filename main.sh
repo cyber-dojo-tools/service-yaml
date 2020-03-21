@@ -15,8 +15,7 @@ start_point_yaml()
   local -r name="${1}"
   local -r upname=$(uppercase "${name}")
   echo
-  echo 'services:'
-  echo "  ${name}"
+  echo "  ${name}:"
   echo '    environment: [ NO_PROMETHEUS ]'
   echo "    image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}"
   echo '    init: true'
