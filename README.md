@@ -8,14 +8,13 @@ For example:
 
 ```bash
 $ cat docker-compose.yml \
-   | tee /tmp/peek.yml \
    | docker run --rm --interactive cyberdojo/service-yaml \
           custom-start-points \
        exercises-start-points \
        languages-start-points \
                       creator \
-   | \
-     docker-compose --file - up --detach
+   | tee /tmp/peek.yml \
+   | docker-compose --file - up --detach
 ```
 
 ```bash
