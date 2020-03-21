@@ -45,11 +45,32 @@ saver_yaml()
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
+creator_yaml()
+{
+  echo
+  echo '  creator:'
+  echo '    depends_on:'
+  echo '      - custom-start-points'
+  echo '      - exercises-start-points'
+  echo '      - languages-start-points'
+  echo '      - saver'
+  echo '    environment: [ NO_PROMETHEUS ]'
+  echo '    image: ${CYBER_DOJO_CREATOR_IMAGE}:${CYBER_DOJO_CREATOR_TAG}'
+  echo '    init: true'
+  echo '    ports: [ "${CYBER_DOJO_CREATOR_PORT}:${CYBER_DOJO_CREATOR_PORT}" ]'
+  echo '    read_only: true'
+  echo '    restart: "no"'
+  echo '    tmpfs: /tmp'
+  echo '    user: nobody'
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
 for service in "$@"; do
   case "${service}" in
        custom-start-points) start_point_yaml "${service}" ;;
     exercises-start-points) start_point_yaml "${service}" ;;
     languages-start-points) start_point_yaml "${service}" ;;
+                   creator) creator_yaml ;;
                      saver) saver_yaml ;;
   esac
 done
