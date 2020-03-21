@@ -1,6 +1,6 @@
 
 - The source for the [cyberdojo/service-yaml](https://hub.docker.com/r/cyberdojo/service-yaml/tags) Docker image.
-- Prints yaml for specified cyber-dojo services ready to be consumed by `docker-compose -`.
+- Prints yaml for specified cyber-dojo services ready to be consumed by `docker-compose --file -`.
 - Also tees `stdin` to `stdout` allowing the 'base' docker-compose.yml to become part of `stdout`.
 - This is because `docker-compose` cannot *combine* named (`-f|--file`) yml files with yml from from `stdin`.
   See [issue 6124](https://github.com/docker/compose/issues/6124)
