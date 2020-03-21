@@ -28,10 +28,28 @@ start_point_yaml()
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
+saver_yaml()
+{
+  echo
+  echo '  saver:'
+  echo '    environment: [ NO_PROMETHEUS ]'
+  echo '    image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}'
+  echo '    init: true'
+  echo '    ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]'
+  echo '    read_only: true'
+  echo '    restart: "no"'
+  echo '    tmpfs:'
+  echo '      - /cyber-dojo:uid=19663,gid=65533'
+  echo '      - /tmp:uid=19663,gid=65533'
+  echo '    user: saver'
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
 for service in "$@"; do
   case "${service}" in
        custom-start-points) start_point_yaml "${service}" ;;
     exercises-start-points) start_point_yaml "${service}" ;;
     languages-start-points) start_point_yaml "${service}" ;;
+                     saver) saver_yaml ;;
   esac
 done
