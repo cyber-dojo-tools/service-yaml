@@ -65,12 +65,45 @@ creator_yaml()
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
+custom_chooser_yaml()
+{
+  echo
+  echo '  custom-chooser:'
+  echo '    build:'
+  echo '      args: [ COMMIT_SHA, CYBER_DOJO_CUSTOM_CHOOSER_PORT ]'
+  echo '      context: src/server'
+  echo '    depends_on:'
+  echo '      - custom-start-points'
+  echo '      - creator'
+  echo '    environment: [ NO_PROMETHEUS ]'
+  echo '    image: ${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}'
+  echo '    init: true'
+  echo '    ports: [ "${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]'
+  echo '    read_only: true'
+  echo '    restart: "no"'
+  echo '    tmpfs: /tmp'
+  echo '    user: nobody'
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+add_test_volume_on_first_service()
+{
+  local -r first_service="${1}"
+  local -r service_name="${2}"
+  if [ "${service_name}" == "${first_service}" ]; then
+    echo '    volumes: [ "./test:/test/:ro" ]'
+  fi
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
 for service in "$@"; do
   case "${service}" in
-       custom-start-points) start_point_yaml "${service}" ;;
-    exercises-start-points) start_point_yaml "${service}" ;;
-    languages-start-points) start_point_yaml "${service}" ;;
-                   creator)     creator_yaml              ;;
-                     saver)       saver_yaml              ;;
+            custom-chooser) custom_chooser_yaml              ;;
+       custom-start-points)    start_point_yaml "${service}" ;;
+    exercises-start-points)    start_point_yaml "${service}" ;;
+    languages-start-points)    start_point_yaml "${service}" ;;
+                   creator)        creator_yaml              ;;
+                     saver)          saver_yaml              ;;
   esac
+  add_test_volume_on_first_service "${1}" "${service}"
 done
