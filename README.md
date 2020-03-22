@@ -5,7 +5,7 @@
 - The `stdout` then becomes piped `stdin` and is consumed by `docker-compose --file -`
   (rather than from a *named* yml file).
 - This design is because `docker-compose` [cannot combine](https://github.com/docker/compose/issues/6124)
-    *named* yml files *with* yml from `stdin`.
+    *named* yml files with yml from `stdin`.
   - So, instead, you must cat the yml files and pipe `stdin`
     into the `docker run ... cyberdojo/service-yaml` command
     (see the `cat` in the example below).
@@ -34,7 +34,7 @@ $ cat docker-compose.yml \
        --detach
 ```
 
-Here's the *base* docker-compose.yml
+Here's docker-compose.yml
 ```bash
 $ cat docker-compose.yml
 
