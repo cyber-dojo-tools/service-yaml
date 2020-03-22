@@ -1,14 +1,17 @@
 
 - The source for the [cyberdojo/service-yaml](https://hub.docker.com/r/cyberdojo/service-yaml/tags) Docker image.
 - Prints yaml for specified cyber-dojo services ready to be consumed by `docker-compose --file -`.
-- Tees `stdin` to `stdout` allowing the 'base' docker-compose.yml to become part of `stdout`.
+- Tees `stdin` to `stdout` allowing the *base* docker-compose.yml to become part of `stdout`.
   - This is because `docker-compose` [cannot](https://github.com/docker/compose/issues/6124)
     *combine* named (`-f|--file`) yml files with yml from `stdin`.
-  - Instead, you must pipe the 'base' docker-compose.yml file into stdin
+  - Instead, you must pipe the *base* docker-compose.yml file into stdin
     (see the `cat` in the example below).
-- Adds a `test/` dir volume-mount for the *first* service name (`custom-chooser` in the example below).
+- Adds a `./test` dir volume-mount for the *first* service name (`custom-chooser` in the example below).
   - This is for the same reason. Viz, because `docker-compose` cannot combine named
     (`-f|--file`) yml files with yml from `stdin` for an *individual* service.
+  - Note that a `docker-compose` command receiving its yaml via `--file -` cannot base
+    relative paths (in volume-mounts) from the directory of the yml (since there isn't one).
+    Instead it uses the current working directory. Caveat emptor.
 
 Example:
 
@@ -24,11 +27,11 @@ $ cat docker-compose.yml \
    | tee /tmp/augmented-docker-compose.peek.yml \
    | docker-compose \
        --file -     \
-       up            \
+       up           \
        --detach
 ```
 
-Here's the 'base' docker-compose.yml
+Here's the *base* docker-compose.yml
 ```bash
 $ cat docker-compose.yml
 
