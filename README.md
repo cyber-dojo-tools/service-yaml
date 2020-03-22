@@ -1,16 +1,19 @@
 
 - The source for the [cyberdojo/service-yaml](https://hub.docker.com/r/cyberdojo/service-yaml/tags) Docker image.
-- Prints yaml for specified cyber-dojo services ready to be consumed by `docker-compose --file -`.
-- Tees `stdin` to `stdout` allowing the *base* docker-compose.yml to become part of `stdout`.
-  - This is because `docker-compose` [cannot](https://github.com/docker/compose/issues/6124)
-    *combine* named (`-f|--file`) yml files with yml from `stdin`.
-  - Instead, you must pipe the *base* docker-compose.yml file into stdin
+- Prints yaml for specified cyber-dojo services to `stdout`
+  ready to be consumed from `stdin` by `docker-compose --file -`
+  (rather than a *named* yml file).
+- *Also* tees `stdin` to `stdout` allowing catted yml files to be blended into `stdout`.
+  - This is because `docker-compose` [cannot combine](https://github.com/docker/compose/issues/6124)
+    *named* yml files with yml from `stdin`.
+  - Instead, you must cat the yml files and pipe `stdin`
+    into the `docker run ... cyberdojo/service-yaml` command
     (see the `cat` in the example below).
-- Adds a `./test` dir volume-mount for the *first* service name (`custom-chooser` in the example below).
+- Adds a `./test` dir volume-mount for the *first* named service (`custom-chooser` in the example below).
   - This is for the same reason. Viz, because `docker-compose` cannot combine named
-    (`-f|--file`) yml files with yml from `stdin` for an *individual* service.
-  - Note that a `docker-compose` command receiving its yaml via `--file -` cannot base
-    relative paths (in volume-mounts) from the directory of the yml (since there isn't one).
+    yml files with yml from `stdin` for an *individual* service.
+  - Note that a `docker-compose` command receiving its yaml from `stdin` cannot base
+    relative paths (in volume-mounts) from the directory of the yml file (since there isn't one).
     Instead it uses the current working directory. Caveat emptor.
 
 Example:
