@@ -86,6 +86,15 @@ custom_chooser_yaml()
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
+selenium_yaml()
+{
+  echo
+  echo '  selenium:'
+  echo '    image: selenium/standalone-firefox'
+  echo '    ports: [ "4444:4444" ]'
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
 add_test_volume_on_first_service()
 {
   local -r first_service="${1}"
@@ -104,6 +113,7 @@ for service in "$@"; do
     languages-start-points)    start_point_yaml "${service}" ;;
                    creator)        creator_yaml              ;;
                      saver)          saver_yaml              ;;
+                  selenium)       selenium_yaml              ;;
   esac
   add_test_volume_on_first_service "${1}" "${service}"
 done
