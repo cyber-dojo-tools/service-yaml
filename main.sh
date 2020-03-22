@@ -86,6 +86,27 @@ custom_chooser_yaml()
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
+languages_chooser_yaml()
+{
+  echo
+  echo '  languages-chooser:'
+  echo '    build:'
+  echo '      args: [ COMMIT_SHA, CYBER_DOJO_LANGUAGES_CHOOSER_PORT ]'
+  echo '      context: src/server'
+  echo '    depends_on:'
+  echo '      - languages-start-points'
+  echo '      - creator'
+  echo '    environment: [ NO_PROMETHEUS ]'
+  echo '    image: ${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}'
+  echo '    init: true'
+  echo '    ports: [ "${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}:${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}" ]'
+  echo '    read_only: true'
+  echo '    restart: "no"'
+  echo '    tmpfs: /tmp'
+  echo '    user: nobody'
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
 selenium_yaml()
 {
   echo
@@ -107,13 +128,14 @@ add_test_volume_on_first_service()
 #- - - - - - - - - - - - - - - - - - - - - -
 for service in "$@"; do
   case "${service}" in
-            custom-chooser) custom_chooser_yaml              ;;
+            custom-chooser)    custom_chooser_yaml ;;
+         languages-chooser) languages_chooser_yaml ;;
        custom-start-points)    start_point_yaml "${service}" ;;
     exercises-start-points)    start_point_yaml "${service}" ;;
     languages-start-points)    start_point_yaml "${service}" ;;
-                   creator)        creator_yaml              ;;
-                     saver)          saver_yaml              ;;
-                  selenium)       selenium_yaml              ;;
+                   creator)        creator_yaml ;;
+                     saver)          saver_yaml ;;
+                  selenium)       selenium_yaml ;;
   esac
   add_test_volume_on_first_service "${1}" "${service}"
 done
