@@ -4,11 +4,13 @@
 - Tees `stdin` to `stdout` allowing the 'base' docker-compose.yml to become part of `stdout`.
   - This is because `docker-compose` [cannot](https://github.com/docker/compose/issues/6124)
     *combine* named (`-f|--file`) yml files with yml from `stdin`.
-- Adds a 'test/' dir volume-mount for the first service name.
-  - This is because (empirically) `docker-compose` cannot split the yaml for a single service across
-    multiple files.
+  - Instead, you must pipe the 'base' docker-compose.yml file into stdin
+    (see the `cat` in the example below).
+- Adds a `test/` dir volume-mount for the *first* service name (`custom-chooser` in the example below).
+  - This is for the same reason. Viz, because `docker-compose` cannot combine named
+    (`-f|--file`) yml files with yml from `stdin` for an *individual* service.
 
-For example:
+Example:
 
 ```bash
 $ cat docker-compose.yml \
@@ -20,9 +22,13 @@ $ cat docker-compose.yml \
                       creator \
                      selenium \
    | tee /tmp/augmented-docker-compose.peek.yml \
-   | docker-compose --file - up --detach
+   | docker-compose \
+       --file -     \
+       up            \
+       --detach
 ```
 
+Here's the 'base' docker-compose.yml
 ```bash
 $ cat docker-compose.yml
 
@@ -40,6 +46,7 @@ services:
     ...
 ```
 
+Here's the generated yml
 ```bash
 $ cat /tmp/augmented-docker-compose.peek.yml
 
