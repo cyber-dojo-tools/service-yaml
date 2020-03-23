@@ -86,6 +86,27 @@ custom_chooser_yaml()
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
+exercises_chooser_yaml()
+{
+  echo
+  echo '  exercises-chooser:'
+  echo '    build:'
+  echo '      args: [ COMMIT_SHA, CYBER_DOJO_EXERCISES_CHOOSER_PORT ]'
+  echo '      context: src/server'
+  echo '    depends_on:'
+  echo '      - exercises-start-points'
+  echo '      - creator'
+  echo '    environment: [ NO_PROMETHEUS ]'
+  echo '    image: ${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}'
+  echo '    init: true'
+  echo '    ports: [ "${CYBER_DOJO_EXERCISES_CHOOSER_PORT}:${CYBER_DOJO_EXERCISES_CHOOSER_PORT}" ]'
+  echo '    read_only: true'
+  echo '    restart: "no"'
+  echo '    tmpfs: /tmp'
+  echo '    user: nobody'
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
 languages_chooser_yaml()
 {
   echo
@@ -129,6 +150,7 @@ add_test_volume_on_first_service()
 for service in "$@"; do
   case "${service}" in
             custom-chooser)    custom_chooser_yaml ;;
+         exercises-chooser) exercises_chooser_yaml ;;
          languages-chooser) languages_chooser_yaml ;;
        custom-start-points)    start_point_yaml "${service}" ;;
     exercises-start-points)    start_point_yaml "${service}" ;;
