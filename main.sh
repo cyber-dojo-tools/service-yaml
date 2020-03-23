@@ -14,123 +14,127 @@ start_point_yaml()
 {
   local -r name="${1}"
   local -r upname=$(uppercase "${name}")
-  echo
-  echo "  ${name}:"
-  echo '    environment: [ NO_PROMETHEUS ]'
-  echo "    image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}"
-  echo '    init: true'
-  echo "    ports: [ \"\${CYBER_DOJO_${upname}_PORT}:\${CYBER_DOJO_${upname}_PORT}\" ]"
-  echo '    read_only: true'
-  echo '    restart: "no"'
-  echo '    tmpfs: /tmp'
-  echo '    user: nobody'
-  echo
+  cat <<- END
+  ${name}:
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}
+    init: true
+    ports: [ "\${CYBER_DOJO_${upname}_PORT}:\${CYBER_DOJO_${upname}_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: nobody
+END
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
 saver_yaml()
 {
-  echo
-  echo '  saver:'
-  echo '    environment: [ NO_PROMETHEUS ]'
-  echo '    image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}'
-  echo '    init: true'
-  echo '    ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]'
-  echo '    read_only: true'
-  echo '    restart: "no"'
-  echo '    tmpfs:'
-  echo '      - /cyber-dojo:uid=19663,gid=65533'
-  echo '      - /tmp:uid=19663,gid=65533'
-  echo '    user: saver'
+  cat <<- END
+  saver:
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_SAVER_IMAGE}:\${CYBER_DOJO_SAVER_TAG}
+    init: true
+    ports: [ "\${CYBER_DOJO_SAVER_PORT}:\${CYBER_DOJO_SAVER_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs:
+      - /cyber-dojo:uid=19663,gid=65533
+      - /tmp:uid=19663,gid=65533
+    user: saver
+END
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
 creator_yaml()
 {
-  echo
-  echo '  creator:'
-  echo '    depends_on:'
-  echo '      - custom-start-points'
-  echo '      - exercises-start-points'
-  echo '      - languages-start-points'
-  echo '      - saver'
-  echo '    environment: [ NO_PROMETHEUS ]'
-  echo '    image: ${CYBER_DOJO_CREATOR_IMAGE}:${CYBER_DOJO_CREATOR_TAG}'
-  echo '    init: true'
-  echo '    ports: [ "${CYBER_DOJO_CREATOR_PORT}:${CYBER_DOJO_CREATOR_PORT}" ]'
-  echo '    read_only: true'
-  echo '    restart: "no"'
-  echo '    tmpfs: /tmp'
-  echo '    user: nobody'
+  cat <<- END
+  creator:
+    depends_on:
+      - custom-start-points
+      - exercises-start-points
+      - languages-start-points
+      - saver
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
+    init: true
+    ports: [ "\${CYBER_DOJO_CREATOR_PORT}:\${CYBER_DOJO_CREATOR_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: nobody
+END
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
 custom_chooser_yaml()
 {
-  echo
-  echo '  custom-chooser:'
-  echo '    build:'
-  echo '      args: [ COMMIT_SHA, CYBER_DOJO_CUSTOM_CHOOSER_PORT ]'
-  echo '      context: src/server'
-  echo '    depends_on:'
-  echo '      - custom-start-points'
-  echo '      - creator'
-  echo '    environment: [ NO_PROMETHEUS ]'
-  echo '    image: ${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}'
-  echo '    init: true'
-  echo '    ports: [ "${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]'
-  echo '    read_only: true'
-  echo '    restart: "no"'
-  echo '    tmpfs: /tmp'
-  echo '    user: nobody'
+  cat  <<- END
+  custom-chooser:
+    build:
+      args: [ COMMIT_SHA, CYBER_DOJO_CUSTOM_CHOOSER_PORT ]
+      context: src/server
+    depends_on:
+      - custom-start-points
+      - creator
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}
+    init: true
+    ports: [ "\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: nobody
+END
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
 exercises_chooser_yaml()
 {
-  echo
-  echo '  exercises-chooser:'
-  echo '    build:'
-  echo '      args: [ COMMIT_SHA, CYBER_DOJO_EXERCISES_CHOOSER_PORT ]'
-  echo '      context: src/server'
-  echo '    depends_on:'
-  echo '      - exercises-start-points'
-  echo '      - creator'
-  echo '    environment: [ NO_PROMETHEUS ]'
-  echo '    image: ${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}'
-  echo '    init: true'
-  echo '    ports: [ "${CYBER_DOJO_EXERCISES_CHOOSER_PORT}:${CYBER_DOJO_EXERCISES_CHOOSER_PORT}" ]'
-  echo '    read_only: true'
-  echo '    restart: "no"'
-  echo '    tmpfs: /tmp'
-  echo '    user: nobody'
+  cat <<- END
+  exercises-chooser:
+    build:
+      args: [ COMMIT_SHA, CYBER_DOJO_EXERCISES_CHOOSER_PORT ]
+      context: src/server
+    depends_on:
+      - exercises-start-points
+      - creator
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}
+    init: true
+    ports: [ "\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}:\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: nobody
+END
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
 languages_chooser_yaml()
 {
-  echo
-  echo '  languages-chooser:'
-  echo '    build:'
-  echo '      args: [ COMMIT_SHA, CYBER_DOJO_LANGUAGES_CHOOSER_PORT ]'
-  echo '      context: src/server'
-  echo '    depends_on:'
-  echo '      - languages-start-points'
-  echo '      - creator'
-  echo '    environment: [ NO_PROMETHEUS ]'
-  echo '    image: ${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}'
-  echo '    init: true'
-  echo '    ports: [ "${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}:${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}" ]'
-  echo '    read_only: true'
-  echo '    restart: "no"'
-  echo '    tmpfs: /tmp'
-  echo '    user: nobody'
+  cat <<- END
+  languages-chooser:
+    build:
+      args: [ COMMIT_SHA, CYBER_DOJO_LANGUAGES_CHOOSER_PORT ]
+      context: src/server
+    depends_on:
+      - languages-start-points
+      - creator
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}
+    init: true
+    ports: [ "\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}:\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: nobody
+END
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
 selenium_yaml()
 {
-  echo
   echo '  selenium:'
   echo '    image: selenium/standalone-firefox'
   echo '    ports: [ "4444:4444" ]'
@@ -148,6 +152,7 @@ add_test_volume_on_first_service()
 
 #- - - - - - - - - - - - - - - - - - - - - -
 for service in "$@"; do
+  echo
   case "${service}" in
             custom-chooser)    custom_chooser_yaml ;;
          exercises-chooser) exercises_chooser_yaml ;;
