@@ -78,7 +78,7 @@ custom_chooser_yaml()
       - custom-start-points
       - creator
     environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}
+    image: \${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}:\${CYBER_DOJO_CUSTOM_CHOOSER_TAG}
     init: true
     ports: [ "\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]
     read_only: true
@@ -100,7 +100,7 @@ exercises_chooser_yaml()
       - exercises-start-points
       - creator
     environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}
+    image: \${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}:\${CYBER_DOJO_EXERCISES_CHOOSER_TAG}
     init: true
     ports: [ "\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}:\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}" ]
     read_only: true
@@ -122,7 +122,7 @@ languages_chooser_yaml()
       - languages-start-points
       - creator
     environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}
+    image: \${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}:\${CYBER_DOJO_LANGUAGES_CHOOSER_TAG}
     init: true
     ports: [ "\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}:\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}" ]
     read_only: true
