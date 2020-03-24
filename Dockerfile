@@ -4,4 +4,4 @@ LABEL maintainer=jon@jaggersoft.com
 RUN apk --update --upgrade --no-cache add bash
 COPY . /app
 
-ENTRYPOINT [ "/app/main.sh" ]
+ENTRYPOINT [ "/app/service-yaml.sh" ]
