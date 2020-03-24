@@ -1,5 +1,6 @@
 #!/bin/bash -Eeu
 
+readonly first_service="${1}"
 readonly stdin="$(</dev/stdin)"
 echo "${stdin}"
 
@@ -69,6 +70,7 @@ END
 #- - - - - - - - - - - - - - - - - - - - - -
 custom_chooser_yaml()
 {
+  local -r tag='\${CYBER_DOJO_CUSTOM_CHOOSER_TAG}'
   cat  <<- END
   custom-chooser:
     build:
@@ -78,7 +80,7 @@ custom_chooser_yaml()
       - custom-start-points
       - creator
     environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}:\${CYBER_DOJO_CUSTOM_CHOOSER_TAG}
+    image: \${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}:$(image_tag custom-chooser ${tag})
     init: true
     ports: [ "\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]
     read_only: true
@@ -91,6 +93,7 @@ END
 #- - - - - - - - - - - - - - - - - - - - - -
 exercises_chooser_yaml()
 {
+  local -r tag='\${CYBER_DOJO_EXERCISES_CHOOSER_TAG}'
   cat <<- END
   exercises-chooser:
     build:
@@ -100,7 +103,7 @@ exercises_chooser_yaml()
       - exercises-start-points
       - creator
     environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}:\${CYBER_DOJO_EXERCISES_CHOOSER_TAG}
+    image: \${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}:$(image_tag exercises-chooser ${tag})
     init: true
     ports: [ "\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}:\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}" ]
     read_only: true
@@ -113,6 +116,7 @@ END
 #- - - - - - - - - - - - - - - - - - - - - -
 languages_chooser_yaml()
 {
+  local -r tag='\${CYBER_DOJO_LANGUAGES_CHOOSER_TAG}'
   cat <<- END
   languages-chooser:
     build:
@@ -122,7 +126,7 @@ languages_chooser_yaml()
       - languages-start-points
       - creator
     environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}:\${CYBER_DOJO_LANGUAGES_CHOOSER_TAG}
+    image: \${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}:$(image_tag languages-chooser ${tag})
     init: true
     ports: [ "\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}:\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}" ]
     read_only: true
@@ -130,6 +134,18 @@ languages_chooser_yaml()
     tmpfs: /tmp
     user: nobody
 END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+image_tag()
+{
+  local -r service_name="${1}"
+  local -r true_tag="${2}"
+  if [ "${service_name}" == "${first_service}" ]; then
+    echo latest
+  else
+    echo "${true_tag}"
+  fi
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
@@ -143,8 +159,7 @@ selenium_yaml()
 #- - - - - - - - - - - - - - - - - - - - - -
 add_test_volume_on_first_service()
 {
-  local -r first_service="${1}"
-  local -r service_name="${2}"
+  local -r service_name="${1}"
   if [ "${service_name}" == "${first_service}" ]; then
     echo '    volumes: [ "./test:/test/:ro" ]'
   fi
@@ -164,5 +179,5 @@ for service in "$@"; do
                      saver)          saver_yaml ;;
                   selenium)       selenium_yaml ;;
   esac
-  add_test_volume_on_first_service "${1}" "${service}"
+  add_test_volume_on_first_service "${service}"
 done
