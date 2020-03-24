@@ -5,9 +5,32 @@ readonly stdin="$(</dev/stdin)"
 echo "${stdin}"
 
 #- - - - - - - - - - - - - - - - - - - - - -
-uppercase()
+service_yaml()
 {
-  echo "${1}" | tr a-z A-Z | tr '-' '_'
+  for service in "$@"; do
+    echo
+    case "${service}" in
+              custom-chooser)    custom_chooser_yaml ;;
+           exercises-chooser) exercises_chooser_yaml ;;
+           languages-chooser) languages_chooser_yaml ;;
+         custom-start-points)       start_point_yaml "${service}" ;;
+      exercises-start-points)       start_point_yaml "${service}" ;;
+      languages-start-points)       start_point_yaml "${service}" ;;
+                     creator)           creator_yaml ;;
+                       saver)             saver_yaml ;;
+                    selenium)          selenium_yaml ;;
+    esac
+    add_test_volume_on_first_service "${service}"
+  done
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+add_test_volume_on_first_service()
+{
+  local -r service_name="${1}"
+  if [ "${service_name}" == "${first_service}" ]; then
+    echo '    volumes: [ "./test:/test/:ro" ]'
+  fi
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
@@ -26,6 +49,12 @@ start_point_yaml()
     tmpfs: /tmp
     user: nobody
 END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+uppercase()
+{
+  echo "${1}" | tr a-z A-Z | tr '-' '_'
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
@@ -157,27 +186,4 @@ selenium_yaml()
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
-add_test_volume_on_first_service()
-{
-  local -r service_name="${1}"
-  if [ "${service_name}" == "${first_service}" ]; then
-    echo '    volumes: [ "./test:/test/:ro" ]'
-  fi
-}
-
-#- - - - - - - - - - - - - - - - - - - - - -
-for service in "$@"; do
-  echo
-  case "${service}" in
-            custom-chooser)    custom_chooser_yaml ;;
-         exercises-chooser) exercises_chooser_yaml ;;
-         languages-chooser) languages_chooser_yaml ;;
-       custom-start-points)    start_point_yaml "${service}" ;;
-    exercises-start-points)    start_point_yaml "${service}" ;;
-    languages-start-points)    start_point_yaml "${service}" ;;
-                   creator)        creator_yaml ;;
-                     saver)          saver_yaml ;;
-                  selenium)       selenium_yaml ;;
-  esac
-  add_test_volume_on_first_service "${service}"
-done
+service_yaml "$@"
