@@ -19,6 +19,7 @@ service_yaml()
                      creator)           creator_yaml ;;
                        saver)             saver_yaml ;;
                     selenium)          selenium_yaml ;;
+                      runner)            runner_yaml ;;
     esac
     add_test_volume_on_first_service "${service}"
   done
@@ -72,6 +73,23 @@ saver_yaml()
       - /cyber-dojo:uid=19663,gid=65533
       - /tmp:uid=19663,gid=65533
     user: saver
+END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+runner_yaml()
+{
+  cat <<- END
+  runner:
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_RUNNER_IMAGE}:\${CYBER_DOJO_RUNNER_TAG}
+    ports: [ "\${CYBER_DOJO_RUNNER_PORT}:\${CYBER_DOJO_RUNNER_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 END
 }
 

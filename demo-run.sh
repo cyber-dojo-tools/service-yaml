@@ -7,4 +7,5 @@ cat "${MY_DIR}/docker-compose.yml" \
        custom-start-points \
     exercises-start-points \
     languages-start-points \
-                   creator
+                   creator \
+                   runner
