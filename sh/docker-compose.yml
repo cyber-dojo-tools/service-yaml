@@ -20,4 +20,3 @@ services:
     restart: "no"
     tmpfs: /tmp
     user: nobody
-    volumes: [ "./test:/test/:ro" ]

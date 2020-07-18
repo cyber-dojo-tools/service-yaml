@@ -79,7 +79,6 @@ services:
         - creator
       environment: [ NO_PROMETHEUS ]
       image: ${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}
-      init: true
       ports: [ "${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]
       read_only: true
       restart: "no"
@@ -90,7 +89,6 @@ services:
   custom-start-points:
     environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_CUSTOM_START_POINTS_IMAGE}:${CYBER_DOJO_CUSTOM_START_POINTS_TAG}
-    init: true
     ports: [ "${CYBER_DOJO_CUSTOM_START_POINTS_PORT}:${CYBER_DOJO_CUSTOM_START_POINTS_PORT}" ]
     read_only: true
     restart: "no"
@@ -100,7 +98,6 @@ services:
   exercises-start-points:
     environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_EXERCISES_START_POINTS_IMAGE}:${CYBER_DOJO_EXERCISES_START_POINTS_TAG}
-    init: true
     ports: [ "${CYBER_DOJO_EXERCISES_START_POINTS_PORT}:${CYBER_DOJO_EXERCISES_START_POINTS_PORT}" ]
     read_only: true
     restart: "no"
@@ -111,7 +108,6 @@ services:
   languages-start-points:
     environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}:${CYBER_DOJO_LANGUAGES_START_POINTS_TAG}
-    init: true
     ports: [ "${CYBER_DOJO_LANGUAGES_START_POINTS_PORT}:${CYBER_DOJO_LANGUAGES_START_POINTS_PORT}" ]
     read_only: true
     restart: "no"
@@ -126,7 +122,6 @@ services:
       - saver
     environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_CREATOR_IMAGE}:${CYBER_DOJO_CREATOR_TAG}
-    init: true
     ports: [ "${CYBER_DOJO_CREATOR_PORT}:${CYBER_DOJO_CREATOR_PORT}" ]
     read_only: true
     restart: "no"
@@ -136,7 +131,6 @@ services:
   saver:
     environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}
-    init: true
     ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]
     read_only: true
     restart: "no"
