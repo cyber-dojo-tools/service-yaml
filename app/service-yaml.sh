@@ -102,6 +102,7 @@ creator_yaml()
       - custom-start-points
       - exercises-start-points
       - languages-start-points
+      - runner
       - saver
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
