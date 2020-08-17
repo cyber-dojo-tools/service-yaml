@@ -20,6 +20,7 @@ service_yaml()
                        saver)             saver_yaml ;;
                     selenium)          selenium_yaml ;;
                       runner)            runner_yaml ;;
+                      puller)            puller_yaml ;;
     esac
     add_test_volume_on_first_service "${service}"
   done
@@ -94,6 +95,23 @@ END
 }
 
 #- - - - - - - - - - - - - - - - - - - - - -
+puller_yaml()
+{
+  cat <<- END
+  puller:
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_PULLER_IMAGE}:\${CYBER_DOJO_PULLER_TAG}
+    ports: [ "\${CYBER_DOJO_PULLER_PORT}:\${CYBER_DOJO_PULLER_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
 creator_yaml()
 {
   cat <<- END
@@ -102,7 +120,7 @@ creator_yaml()
       - custom-start-points
       - exercises-start-points
       - languages-start-points
-      - runner
+      - puller
       - saver
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
