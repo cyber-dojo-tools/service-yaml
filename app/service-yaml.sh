@@ -10,7 +10,6 @@ service_yaml()
   for service in "$@"; do
     echo
     case "${service}" in
-              custom-chooser)    custom_chooser_yaml ;;
            exercises-chooser) exercises_chooser_yaml ;;
            languages-chooser) languages_chooser_yaml ;;
          custom-start-points)       start_point_yaml "${service}" ;;
@@ -44,7 +43,6 @@ start_point_yaml()
   ${name}:
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}
-    init: true
     ports: [ "\${CYBER_DOJO_${upname}_PORT}:\${CYBER_DOJO_${upname}_PORT}" ]
     read_only: true
     restart: "no"
@@ -124,31 +122,7 @@ creator_yaml()
       - saver
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
-    init: true
     ports: [ "\${CYBER_DOJO_CREATOR_PORT}:\${CYBER_DOJO_CREATOR_PORT}" ]
-    read_only: true
-    restart: "no"
-    tmpfs: /tmp
-    user: nobody
-END
-}
-
-#- - - - - - - - - - - - - - - - - - - - - -
-custom_chooser_yaml()
-{
-  local -r tag='\${CYBER_DOJO_CUSTOM_CHOOSER_TAG}'
-  cat  <<- END
-  custom-chooser:
-    build:
-      args: [ COMMIT_SHA, CYBER_DOJO_CUSTOM_CHOOSER_PORT ]
-      context: src/server
-    depends_on:
-      - custom-start-points
-      - creator
-    environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}:$(image_tag custom-chooser ${tag})
-    init: true
-    ports: [ "\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:\${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -162,15 +136,11 @@ exercises_chooser_yaml()
   local -r tag='\${CYBER_DOJO_EXERCISES_CHOOSER_TAG}'
   cat <<- END
   exercises-chooser:
-    build:
-      args: [ COMMIT_SHA, CYBER_DOJO_EXERCISES_CHOOSER_PORT ]
-      context: src/server
     depends_on:
       - exercises-start-points
       - creator
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}:$(image_tag exercises-chooser ${tag})
-    init: true
     ports: [ "\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}:\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}" ]
     read_only: true
     restart: "no"
@@ -193,7 +163,6 @@ languages_chooser_yaml()
       - creator
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}:$(image_tag languages-chooser ${tag})
-    init: true
     ports: [ "\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}:\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}" ]
     read_only: true
     restart: "no"
