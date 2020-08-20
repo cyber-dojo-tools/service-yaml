@@ -9,7 +9,7 @@
   - So, instead, you must cat the yml files and pipe `stdin`
     into the `docker run ... cyberdojo/service-yaml` command
     (see the `cat` in the example below).
-- Adds a `./test` dir volume-mount for the *first* named service (`custom-chooser` in the example below).
+- Adds a `./test` dir volume-mount for the *first* named service (`custom-start-points` in the example below).
   - This is for the same reason. Viz, because `docker-compose` cannot combine named
     yml files with yml from `stdin` for an *individual* service.
 - Note that a `docker-compose` command receiving its yaml from `stdin` cannot base
@@ -21,7 +21,6 @@ Example:
 ```bash
 $ cat docker-compose.yml \
    | docker run --rm --interactive cyberdojo/service-yaml \
-               custom-chooser \
           custom-start-points \
        exercises-start-points \
        languages-start-points \
@@ -46,7 +45,6 @@ services:
       args: [ COMMIT_SHA, CYBER_DOJO_CREATOR_CLIENT_PORT ]
       context: src/client
     depends_on:
-      - custom-chooser
       - selenium
     image: cyberdojo/creator-client
     ...
@@ -65,26 +63,9 @@ services:
       args: [ COMMIT_SHA, CYBER_DOJO_CREATOR_CLIENT_PORT ]
       context: src/client
     depends_on:
-      - custom-chooser
       - selenium
     image: cyberdojo/creator-client
     ...
-
-  custom-chooser:
-      build:
-        args: [ COMMIT_SHA, CYBER_DOJO_CUSTOM_CHOOSER_PORT ]
-        context: src/server
-      depends_on:
-        - custom-start-points
-        - creator
-      environment: [ NO_PROMETHEUS ]
-      image: ${CYBER_DOJO_CUSTOM_CHOOSER_IMAGE}
-      ports: [ "${CYBER_DOJO_CUSTOM_CHOOSER_PORT}:${CYBER_DOJO_CUSTOM_CHOOSER_PORT}" ]
-      read_only: true
-      restart: "no"
-      tmpfs: /tmp
-      user: nobody
-      volumes: [ "./test:/test/:ro" ]
 
   custom-start-points:
     environment: [ NO_PROMETHEUS ]

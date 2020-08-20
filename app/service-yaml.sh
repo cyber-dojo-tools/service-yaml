@@ -10,8 +10,6 @@ service_yaml()
   for service in "$@"; do
     echo
     case "${service}" in
-           exercises-chooser) exercises_chooser_yaml ;;
-           languages-chooser) languages_chooser_yaml ;;
          custom-start-points)       start_point_yaml "${service}" ;;
       exercises-start-points)       start_point_yaml "${service}" ;;
       languages-start-points)       start_point_yaml "${service}" ;;
@@ -123,47 +121,6 @@ creator_yaml()
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
     ports: [ "\${CYBER_DOJO_CREATOR_PORT}:\${CYBER_DOJO_CREATOR_PORT}" ]
-    read_only: true
-    restart: "no"
-    tmpfs: /tmp
-    user: nobody
-END
-}
-
-#- - - - - - - - - - - - - - - - - - - - - -
-exercises_chooser_yaml()
-{
-  local -r tag='\${CYBER_DOJO_EXERCISES_CHOOSER_TAG}'
-  cat <<- END
-  exercises-chooser:
-    depends_on:
-      - exercises-start-points
-      - creator
-    environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_EXERCISES_CHOOSER_IMAGE}:$(image_tag exercises-chooser ${tag})
-    ports: [ "\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}:\${CYBER_DOJO_EXERCISES_CHOOSER_PORT}" ]
-    read_only: true
-    restart: "no"
-    tmpfs: /tmp
-    user: nobody
-END
-}
-
-#- - - - - - - - - - - - - - - - - - - - - -
-languages_chooser_yaml()
-{
-  local -r tag='\${CYBER_DOJO_LANGUAGES_CHOOSER_TAG}'
-  cat <<- END
-  languages-chooser:
-    build:
-      args: [ COMMIT_SHA, CYBER_DOJO_LANGUAGES_CHOOSER_PORT ]
-      context: src/server
-    depends_on:
-      - languages-start-points
-      - creator
-    environment: [ NO_PROMETHEUS ]
-    image: \${CYBER_DOJO_LANGUAGES_CHOOSER_IMAGE}:$(image_tag languages-chooser ${tag})
-    ports: [ "\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}:\${CYBER_DOJO_LANGUAGES_CHOOSER_PORT}" ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
