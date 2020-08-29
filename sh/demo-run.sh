@@ -8,4 +8,5 @@ cat "${MY_DIR}/docker-compose.yml" \
     exercises-start-points \
     languages-start-points \
                    creator \
+                   puller  \
                    runner
