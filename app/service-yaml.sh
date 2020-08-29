@@ -13,6 +13,7 @@ service_yaml()
          custom-start-points)       start_point_yaml "${service}" ;;
       exercises-start-points)       start_point_yaml "${service}" ;;
       languages-start-points)       start_point_yaml "${service}" ;;
+                    avatars )           avatars_yaml ;;
                      creator)           creator_yaml ;;
                        saver)             saver_yaml ;;
                     selenium)          selenium_yaml ;;
@@ -39,13 +40,13 @@ start_point_yaml()
   local -r upname=$(uppercase "${name}")
   cat <<- END
   ${name}:
-    environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}
+    user: nobody
     ports: [ "\${CYBER_DOJO_${upname}_PORT}:\${CYBER_DOJO_${upname}_PORT}" ]
+    environment: [ NO_PROMETHEUS ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
-    user: nobody
 END
 }
 
@@ -60,16 +61,31 @@ saver_yaml()
 {
   cat <<- END
   saver:
-    environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_SAVER_IMAGE}:\${CYBER_DOJO_SAVER_TAG}
-    init: true
+    user: saver
     ports: [ "\${CYBER_DOJO_SAVER_PORT}:\${CYBER_DOJO_SAVER_PORT}" ]
+    environment: [ NO_PROMETHEUS ]
+    init: true
     read_only: true
     restart: "no"
     tmpfs:
       - /cyber-dojo:uid=19663,gid=65533
       - /tmp:uid=19663,gid=65533
-    user: saver
+END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+avatars_yaml()
+{
+  cat <<- END
+  avatars:
+    image: \${CYBER_DOJO_AVATARS_IMAGE}:\${CYBER_DOJO_AVATARS_TAG}
+    user: nobody
+    ports: [ "\${CYBER_DOJO_AVATARS_PORT}:\${CYBER_DOJO_AVATARS_PORT}" ]
+    environment: [ NO_PROMETHEUS=true ]
+    read_only: true
+    restart: 'no'
+    tmpfs: /tmp
 END
 }
 
@@ -78,13 +94,13 @@ runner_yaml()
 {
   cat <<- END
   runner:
-    environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_RUNNER_IMAGE}:\${CYBER_DOJO_RUNNER_TAG}
+    user: root
     ports: [ "\${CYBER_DOJO_RUNNER_PORT}:\${CYBER_DOJO_RUNNER_PORT}" ]
+    environment: [ NO_PROMETHEUS ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
-    user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 END
