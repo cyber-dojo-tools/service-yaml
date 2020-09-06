@@ -15,6 +15,7 @@ service_yaml()
       languages-start-points)       start_point_yaml "${service}" ;;
                     avatars )           avatars_yaml ;;
                      creator)           creator_yaml ;;
+                       model)             model_yaml ;;
                        saver)             saver_yaml ;;
                     selenium)          selenium_yaml ;;
                       runner)            runner_yaml ;;
@@ -115,10 +116,27 @@ creator_yaml()
       - exercises-start-points
       - languages-start-points
       - runner
-      - saver
+      - model
     environment: [ NO_PROMETHEUS ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
     ports: [ "\${CYBER_DOJO_CREATOR_PORT}:\${CYBER_DOJO_CREATOR_PORT}" ]
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    user: nobody
+END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+model_yaml()
+{
+  cat <<- END
+  model:
+    depends_on:
+      - saver
+    environment: [ NO_PROMETHEUS ]
+    image: \${CYBER_DOJO_MODEL_IMAGE}:\${CYBER_DOJO_MODEL_TAG}
+    ports: [ "\${CYBER_DOJO_MODEL_PORT}:\${CYBER_DOJO_MODEL_PORT}" ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
