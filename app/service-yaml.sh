@@ -43,7 +43,8 @@ start_point_yaml()
     image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}
     user: nobody
     ports: [ "\${CYBER_DOJO_${upname}_PORT}:\${CYBER_DOJO_${upname}_PORT}" ]
-    environment: [ NO_PROMETHEUS ]
+    env_file:
+      - .env
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -64,7 +65,8 @@ saver_yaml()
     image: \${CYBER_DOJO_SAVER_IMAGE}:\${CYBER_DOJO_SAVER_TAG}
     user: saver
     ports: [ "\${CYBER_DOJO_SAVER_PORT}:\${CYBER_DOJO_SAVER_PORT}" ]
-    environment: [ NO_PROMETHEUS ]
+    env_file:
+      - .env
     init: true
     read_only: true
     restart: "no"
@@ -82,7 +84,8 @@ avatars_yaml()
     image: \${CYBER_DOJO_AVATARS_IMAGE}:\${CYBER_DOJO_AVATARS_TAG}
     user: nobody
     ports: [ "\${CYBER_DOJO_AVATARS_PORT}:\${CYBER_DOJO_AVATARS_PORT}" ]
-    environment: [ NO_PROMETHEUS=true ]
+    env_file:
+      - .env
     read_only: true
     restart: 'no'
     tmpfs: /tmp
@@ -97,7 +100,8 @@ runner_yaml()
     image: \${CYBER_DOJO_RUNNER_IMAGE}:\${CYBER_DOJO_RUNNER_TAG}
     user: root
     ports: [ "\${CYBER_DOJO_RUNNER_PORT}:\${CYBER_DOJO_RUNNER_PORT}" ]
-    environment: [ NO_PROMETHEUS ]
+    env_file:
+      - .env
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -117,7 +121,8 @@ creator_yaml()
       - languages-start-points
       - runner
       - model
-    environment: [ NO_PROMETHEUS ]
+    env_file:
+      - .env
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
     ports: [ "\${CYBER_DOJO_CREATOR_PORT}:\${CYBER_DOJO_CREATOR_PORT}" ]
     read_only: true
@@ -134,7 +139,8 @@ model_yaml()
   model:
     depends_on:
       - saver
-    environment: [ NO_PROMETHEUS ]
+    env_file:
+      - .env
     image: \${CYBER_DOJO_MODEL_IMAGE}:\${CYBER_DOJO_MODEL_TAG}
     ports: [ "\${CYBER_DOJO_MODEL_PORT}:\${CYBER_DOJO_MODEL_PORT}" ]
     read_only: true
