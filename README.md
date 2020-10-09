@@ -68,7 +68,6 @@ services:
     ...
 
   custom-start-points:
-    environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_CUSTOM_START_POINTS_IMAGE}:${CYBER_DOJO_CUSTOM_START_POINTS_TAG}
     ports: [ "${CYBER_DOJO_CUSTOM_START_POINTS_PORT}:${CYBER_DOJO_CUSTOM_START_POINTS_PORT}" ]
     read_only: true
@@ -77,7 +76,6 @@ services:
     user: nobody
 
   exercises-start-points:
-    environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_EXERCISES_START_POINTS_IMAGE}:${CYBER_DOJO_EXERCISES_START_POINTS_TAG}
     ports: [ "${CYBER_DOJO_EXERCISES_START_POINTS_PORT}:${CYBER_DOJO_EXERCISES_START_POINTS_PORT}" ]
     read_only: true
@@ -87,7 +85,6 @@ services:
 
 
   languages-start-points:
-    environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}:${CYBER_DOJO_LANGUAGES_START_POINTS_TAG}
     ports: [ "${CYBER_DOJO_LANGUAGES_START_POINTS_PORT}:${CYBER_DOJO_LANGUAGES_START_POINTS_PORT}" ]
     read_only: true
@@ -101,7 +98,6 @@ services:
       - exercises-start-points
       - languages-start-points
       - saver
-    environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_CREATOR_IMAGE}:${CYBER_DOJO_CREATOR_TAG}
     ports: [ "${CYBER_DOJO_CREATOR_PORT}:${CYBER_DOJO_CREATOR_PORT}" ]
     read_only: true
@@ -110,7 +106,6 @@ services:
     user: nobody
 
   saver:
-    environment: [ NO_PROMETHEUS ]
     image: ${CYBER_DOJO_SAVER_IMAGE}:${CYBER_DOJO_SAVER_TAG}
     ports: [ "${CYBER_DOJO_SAVER_PORT}:${CYBER_DOJO_SAVER_PORT}" ]
     read_only: true
