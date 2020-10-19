@@ -13,7 +13,6 @@ service_yaml()
          custom-start-points)       start_point_yaml "${service}" ;;
       exercises-start-points)       start_point_yaml "${service}" ;;
       languages-start-points)       start_point_yaml "${service}" ;;
-                    avatars )           avatars_yaml ;;
                      creator)           creator_yaml ;;
                        model)             model_yaml ;;
                        saver)             saver_yaml ;;
@@ -73,22 +72,6 @@ saver_yaml()
     tmpfs:
       - /cyber-dojo:uid=19663,gid=65533
       - /tmp:uid=19663,gid=65533
-END
-}
-
-#- - - - - - - - - - - - - - - - - - - - - -
-avatars_yaml()
-{
-  cat <<- END
-  avatars:
-    image: \${CYBER_DOJO_AVATARS_IMAGE}:\${CYBER_DOJO_AVATARS_TAG}
-    user: nobody
-    ports: [ "\${CYBER_DOJO_AVATARS_PORT}:\${CYBER_DOJO_AVATARS_PORT}" ]
-    env_file:
-      - .env
-    read_only: true
-    restart: 'no'
-    tmpfs: /tmp
 END
 }
 
