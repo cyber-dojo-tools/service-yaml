@@ -14,6 +14,7 @@ service_yaml()
       exercises-start-points)       start_point_yaml "${service}" ;;
       languages-start-points)       start_point_yaml "${service}" ;;
                      creator)           creator_yaml ;;
+                      differ)            differ_yaml ;;
                        model)             model_yaml ;;
                        saver)             saver_yaml ;;
                     selenium)          selenium_yaml ;;
@@ -90,6 +91,24 @@ runner_yaml()
     tmpfs: /tmp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+differ_yaml()
+{
+  cat <<- END
+  differ:
+    depends_on:
+      - model
+    image: \${CYBER_DOJO_DIFFER_IMAGE}:\${CYBER_DOJO_DIFFER_TAG}
+    user: nobody
+    ports: [ "\${CYBER_DOJO_DIFFER_PORT}:\${CYBER_DOJO_DIFFER_PORT}" ]
+    env_file:
+      - .env
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
 END
 }
 
