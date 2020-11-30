@@ -14,6 +14,7 @@ service_yaml()
       exercises-start-points)       start_point_yaml "${service}" ;;
       languages-start-points)       start_point_yaml "${service}" ;;
                      creator)           creator_yaml ;;
+                   dashboard)         dashboard_yaml ;;
                       differ)            differ_yaml ;;
                        model)             model_yaml ;;
                        saver)             saver_yaml ;;
@@ -104,6 +105,24 @@ differ_yaml()
     image: \${CYBER_DOJO_DIFFER_IMAGE}:\${CYBER_DOJO_DIFFER_TAG}
     user: nobody
     ports: [ "\${CYBER_DOJO_DIFFER_PORT}:\${CYBER_DOJO_DIFFER_PORT}" ]
+    env_file:
+      - .env
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+END
+}
+
+#- - - - - - - - - - - - - - - - - - - - - -
+dashboard_yaml()
+{
+  cat <<- END
+  dashboard:
+    depends_on:
+      - model
+    image: \${CYBER_DOJO_DASHBOARD_IMAGE}:\${CYBER_DOJO_DASHBOARD_TAG}
+    user: nobody
+    ports: [ "\${CYBER_DOJO_DASHBOARD_PORT}:\${CYBER_DOJO_DASHBOARD_PORT}" ]
     env_file:
       - .env
     read_only: true
