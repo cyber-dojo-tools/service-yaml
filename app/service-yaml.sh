@@ -44,8 +44,7 @@ start_point_yaml()
     image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}
     user: nobody
     ports: [ "\${CYBER_DOJO_${upname}_PORT}:\${CYBER_DOJO_${upname}_PORT}" ]
-    env_file:
-      - .env
+    env_file: [ .env ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -66,8 +65,7 @@ saver_yaml()
     image: \${CYBER_DOJO_SAVER_IMAGE}:\${CYBER_DOJO_SAVER_TAG}
     user: saver
     ports: [ "\${CYBER_DOJO_SAVER_PORT}:\${CYBER_DOJO_SAVER_PORT}" ]
-    env_file:
-      - .env
+    env_file: [ .env ]
     init: true
     read_only: true
     restart: "no"
@@ -85,8 +83,7 @@ runner_yaml()
     image: \${CYBER_DOJO_RUNNER_IMAGE}:\${CYBER_DOJO_RUNNER_TAG}
     user: root
     ports: [ "\${CYBER_DOJO_RUNNER_PORT}:\${CYBER_DOJO_RUNNER_PORT}" ]
-    env_file:
-      - .env
+    env_file: [ .env ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -105,8 +102,7 @@ differ_yaml()
     image: \${CYBER_DOJO_DIFFER_IMAGE}:\${CYBER_DOJO_DIFFER_TAG}
     user: nobody
     ports: [ "\${CYBER_DOJO_DIFFER_PORT}:\${CYBER_DOJO_DIFFER_PORT}" ]
-    env_file:
-      - .env
+    env_file: [ .env ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -123,8 +119,7 @@ dashboard_yaml()
     image: \${CYBER_DOJO_DASHBOARD_IMAGE}:\${CYBER_DOJO_DASHBOARD_TAG}
     user: nobody
     ports: [ "\${CYBER_DOJO_DASHBOARD_PORT}:\${CYBER_DOJO_DASHBOARD_PORT}" ]
-    env_file:
-      - .env
+    env_file: [ .env ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -142,8 +137,7 @@ creator_yaml()
       - languages-start-points
       - runner
       - model
-    env_file:
-      - .env
+    env_file: [ .env ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
     ports: [ "\${CYBER_DOJO_CREATOR_PORT}:\${CYBER_DOJO_CREATOR_PORT}" ]
     read_only: true
@@ -160,8 +154,7 @@ model_yaml()
   model:
     depends_on:
       - saver
-    env_file:
-      - .env
+    env_file: [ .env ]
     image: \${CYBER_DOJO_MODEL_IMAGE}:\${CYBER_DOJO_MODEL_TAG}
     ports: [ "\${CYBER_DOJO_MODEL_PORT}:\${CYBER_DOJO_MODEL_PORT}" ]
     read_only: true
