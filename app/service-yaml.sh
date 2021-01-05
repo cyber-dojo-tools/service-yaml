@@ -43,7 +43,6 @@ start_point_yaml()
   ${name}:
     image: \${CYBER_DOJO_${upname}_IMAGE}:\${CYBER_DOJO_${upname}_TAG}
     user: nobody
-    ports: [ "\${CYBER_DOJO_${upname}_PORT}:\${CYBER_DOJO_${upname}_PORT}" ]
     env_file: [ .env ]
     read_only: true
     restart: "no"
@@ -82,7 +81,6 @@ runner_yaml()
   runner:
     image: \${CYBER_DOJO_RUNNER_IMAGE}:\${CYBER_DOJO_RUNNER_TAG}
     user: root
-    ports: [ "\${CYBER_DOJO_RUNNER_PORT}:\${CYBER_DOJO_RUNNER_PORT}" ]
     env_file: [ .env ]
     read_only: true
     restart: "no"
@@ -101,7 +99,6 @@ differ_yaml()
       - model
     image: \${CYBER_DOJO_DIFFER_IMAGE}:\${CYBER_DOJO_DIFFER_TAG}
     user: nobody
-    ports: [ "\${CYBER_DOJO_DIFFER_PORT}:\${CYBER_DOJO_DIFFER_PORT}" ]
     env_file: [ .env ]
     read_only: true
     restart: "no"
@@ -118,7 +115,6 @@ dashboard_yaml()
       - model
     image: \${CYBER_DOJO_DASHBOARD_IMAGE}:\${CYBER_DOJO_DASHBOARD_TAG}
     user: nobody
-    ports: [ "\${CYBER_DOJO_DASHBOARD_PORT}:\${CYBER_DOJO_DASHBOARD_PORT}" ]
     env_file: [ .env ]
     read_only: true
     restart: "no"
@@ -139,7 +135,6 @@ creator_yaml()
       - model
     env_file: [ .env ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
-    ports: [ "\${CYBER_DOJO_CREATOR_PORT}:\${CYBER_DOJO_CREATOR_PORT}" ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
@@ -156,7 +151,6 @@ model_yaml()
       - saver
     env_file: [ .env ]
     image: \${CYBER_DOJO_MODEL_IMAGE}:\${CYBER_DOJO_MODEL_TAG}
-    ports: [ "\${CYBER_DOJO_MODEL_PORT}:\${CYBER_DOJO_MODEL_PORT}" ]
     read_only: true
     restart: "no"
     tmpfs: /tmp
