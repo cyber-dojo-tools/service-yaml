@@ -9,9 +9,6 @@
   - So, instead, you must cat the yml files and pipe `stdin`
     into the `docker run ... cyberdojo/service-yaml` command
     (see the `cat` in the example below).
-- Adds a `./test` dir volume-mount for the *first* named service (`custom-start-points` in the example below).
-  - This is for the same reason. Viz, because `docker-compose` cannot combine named
-    yml files with yml from `stdin` for an *individual* service.
 - Note that a `docker-compose` command receiving its yaml from `stdin` cannot base
   relative paths (in volume-mounts) from the directory of the yml file (since there isn't one).
   Instead it uses the current working directory. Caveat emptor.

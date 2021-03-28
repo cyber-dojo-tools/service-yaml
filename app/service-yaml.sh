@@ -21,7 +21,7 @@ service_yaml()
                     selenium)          selenium_yaml ;;
                       runner)            runner_yaml ;;
     esac
-    add_test_volume_on_first_service "${service}"
+    #add_test_volume_on_first_service "${service}"
   done
 }
 
