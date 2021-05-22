@@ -96,7 +96,7 @@ differ_yaml()
   cat <<- END
   differ:
     depends_on:
-      - model
+      - saver
     image: \${CYBER_DOJO_DIFFER_IMAGE}:\${CYBER_DOJO_DIFFER_TAG}
     user: nobody
     env_file: [ .env ]
