@@ -16,7 +16,6 @@ service_yaml()
                      creator)           creator_yaml ;;
                    dashboard)         dashboard_yaml ;;
                       differ)            differ_yaml ;;
-                       model)             model_yaml ;;
                        saver)             saver_yaml ;;
                     selenium)          selenium_yaml ;;
                       runner)            runner_yaml ;;
@@ -112,7 +111,7 @@ dashboard_yaml()
   cat <<- END
   dashboard:
     depends_on:
-      - model
+      - saver
     image: \${CYBER_DOJO_DASHBOARD_IMAGE}:\${CYBER_DOJO_DASHBOARD_TAG}
     user: nobody
     env_file: [ .env ]
@@ -132,25 +131,8 @@ creator_yaml()
       - exercises-start-points
       - languages-start-points
       - runner
-      - model
     env_file: [ .env ]
     image: \${CYBER_DOJO_CREATOR_IMAGE}:\${CYBER_DOJO_CREATOR_TAG}
-    read_only: true
-    restart: "no"
-    tmpfs: /tmp
-    user: nobody
-END
-}
-
-#- - - - - - - - - - - - - - - - - - - - - -
-model_yaml()
-{
-  cat <<- END
-  model:
-    depends_on:
-      - saver
-    env_file: [ .env ]
-    image: \${CYBER_DOJO_MODEL_IMAGE}:\${CYBER_DOJO_MODEL_TAG}
     read_only: true
     restart: "no"
     tmpfs: /tmp
